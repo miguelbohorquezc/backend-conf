@@ -14,7 +14,18 @@ model User {
   name      String
   role      Role     @default(ADMIN)
   createdAt DateTime @default(now())
-  phone     String?   @unique
+  phone     String?  
+  resetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum Role {
